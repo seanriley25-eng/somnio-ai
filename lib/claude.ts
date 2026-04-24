@@ -18,9 +18,8 @@ const INTERPRETATION_SCHEMA = {
     },
     symbols: {
       type: 'array',
-      description: 'Between 3 and 5 of the most resonant symbols from the dream.',
-      minItems: 3,
-      maxItems: 5,
+      description:
+        'Between 3 and 5 of the most resonant symbols from the dream. Prefer 4.',
       items: {
         type: 'object',
         properties: {
@@ -89,7 +88,7 @@ export async function interpretDream(
 
   const response = await client.messages.create({
     model: 'claude-opus-4-7',
-    max_tokens: 2048,
+    max_tokens: 8192,
     system: SYSTEM_PROMPT,
     thinking: { type: 'adaptive' },
     output_config: {
