@@ -10,14 +10,23 @@ type Params = { share_id: string };
 
 async function loadDream(share_id: string) {
   const supabase = await createClient();
-  const { data } = await supabase
-    .from('dreams')
-    .select('share_id, title, narrative, symbols, insight, mood, image_url, created_at')
-    .eq('share_id', share_id)
-    .maybeSingle();
-  return data as
-    | Pick<Dream, 'share_id' | 'title' | 'narrative' | 'symbols' | 'insight' | 'mood' | 'image_url' | 'created_at'>
-    | null;
+  // Retry briefly to absorb any read-after-write gap between the /api/interpret
+  // insert and the immediate redirect landing here.
+  for (let attempt = 0; attempt < 3; attempt++) {
+    const { data } = await supabase
+      .from('dreams')
+      .select('share_id, title, narrative, symbols, insight, mood, image_url, created_at')
+      .eq('share_id', share_id)
+      .maybeSingle();
+    if (data) {
+      return data as Pick<
+        Dream,
+        'share_id' | 'title' | 'narrative' | 'symbols' | 'insight' | 'mood' | 'image_url' | 'created_at'
+      >;
+    }
+    if (attempt < 2) await new Promise((r) => setTimeout(r, 300));
+  }
+  return null;
 }
 
 export async function generateMetadata({
