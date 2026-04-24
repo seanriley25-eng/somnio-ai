@@ -1,13 +1,44 @@
 'use client';
 
 import Link from 'next/link';
-import { Moon, BookOpen, Sparkles, FileText } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { Moon, BookOpen, Sparkles, FileText, Notebook, LogOut } from 'lucide-react';
+import { usePathname, useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 export default function Navigation() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [email, setEmail] = useState<string | null>(null);
+
+  useEffect(() => {
+    const supabase = createClient();
+
+    supabase.auth.getUser().then(({ data }) => setEmail(data.user?.email ?? null));
+
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      setEmail(session?.user.email ?? null);
+      router.refresh();
+    });
+
+    return () => sub.subscription.unsubscribe();
+  }, [router]);
 
   const isActive = (path: string) => pathname === path;
+
+  const navLink = (href: string, label: string, Icon: React.ComponentType<{ className?: string }>) => (
+    <Link
+      href={href}
+      className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+        isActive(href)
+          ? 'bg-purple-500/20 text-purple-300'
+          : 'text-gray-300 hover:text-purple-300 hover:bg-purple-500/10'
+      }`}
+    >
+      <Icon className="w-4 h-4" />
+      <span>{label}</span>
+    </Link>
+  );
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 glass-strong border-b border-purple-500/20">
@@ -23,40 +54,31 @@ export default function Navigation() {
             </span>
           </Link>
 
-          <div className="flex items-center space-x-6">
-            <Link
-              href="/"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                isActive('/')
-                  ? 'bg-purple-500/20 text-purple-300'
-                  : 'text-gray-300 hover:text-purple-300 hover:bg-purple-500/10'
-              }`}
-            >
-              <Sparkles className="w-4 h-4" />
-              <span>Dream Tracker</span>
-            </Link>
-            <Link
-              href="/dictionary"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                isActive('/dictionary')
-                  ? 'bg-purple-500/20 text-purple-300'
-                  : 'text-gray-300 hover:text-purple-300 hover:bg-purple-500/10'
-              }`}
-            >
-              <BookOpen className="w-4 h-4" />
-              <span>Dictionary</span>
-            </Link>
-            <Link
-              href="/blog"
-              className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
-                isActive('/blog')
-                  ? 'bg-purple-500/20 text-purple-300'
-                  : 'text-gray-300 hover:text-purple-300 hover:bg-purple-500/10'
-              }`}
-            >
-              <FileText className="w-4 h-4" />
-              <span>Blog</span>
-            </Link>
+          <div className="flex items-center space-x-2 md:space-x-4">
+            {navLink('/', 'Dream', Sparkles)}
+            {email && navLink('/dreams', 'Journal', Notebook)}
+            {navLink('/dictionary', 'Dictionary', BookOpen)}
+            {navLink('/blog', 'Blog', FileText)}
+
+            {email ? (
+              <form action="/auth/signout" method="post">
+                <button
+                  type="submit"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-lg text-gray-300 hover:text-purple-300 hover:bg-purple-500/10 transition-all"
+                  title={`Sign out ${email}`}
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden md:inline">Sign out</span>
+                </button>
+              </form>
+            ) : (
+              <Link
+                href="/login"
+                className="px-4 py-2 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium transition-all"
+              >
+                Sign in
+              </Link>
+            )}
           </div>
         </div>
       </div>
