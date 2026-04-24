@@ -5,7 +5,7 @@ create extension if not exists "pgcrypto";
 create table public.dreams (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
-  share_id text not null unique default encode(gen_random_bytes(9), 'base64'),
+  share_id text not null unique default encode(gen_random_bytes(9), 'hex'),
   dream_text text not null,
   title text not null,
   narrative text not null,
