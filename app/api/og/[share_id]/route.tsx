@@ -32,7 +32,7 @@ export async function GET(
   const supabase = await createClient();
   const { data: dream } = await supabase
     .from('dreams')
-    .select('title, narrative, insight, mood, symbols')
+    .select('title, narrative, insight, mood, symbols, image_url')
     .eq('share_id', share_id)
     .maybeSingle();
 
@@ -41,8 +41,19 @@ export async function GET(
   const insight = dream?.insight ?? 'Unlock your subconscious. Every morning.';
   const mood = (dream?.mood as DreamMood) ?? 'mysterious';
   const symbols = (dream?.symbols as { name: string }[] | undefined) ?? [];
+  const imageUrl = (dream?.image_url as string | null) ?? null;
   const theme = moodTheme[mood] ?? moodTheme.mysterious;
   const pullQuote = firstSentence(narrative || insight);
+
+  const background = imageUrl
+    ? {
+        backgroundImage: `url(${imageUrl})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }
+    : {
+        background: `radial-gradient(circle at 15% 10%, ${theme.glow} 0%, transparent 45%), radial-gradient(circle at 85% 90%, ${theme.glow} 0%, transparent 50%), linear-gradient(135deg, ${theme.from} 0%, ${theme.to} 120%)`,
+      };
 
   return new ImageResponse(
     (
@@ -53,51 +64,34 @@ export async function GET(
           display: 'flex',
           flexDirection: 'column',
           padding: '72px 80px',
-          background: `radial-gradient(circle at 15% 10%, ${theme.glow} 0%, transparent 45%), radial-gradient(circle at 85% 90%, ${theme.glow} 0%, transparent 50%), linear-gradient(135deg, ${theme.from} 0%, ${theme.to} 120%)`,
           color: '#f8fafc',
           fontFamily: 'Inter, system-ui, sans-serif',
           position: 'relative',
+          ...background,
         }}
       >
-        {/* Subtle constellation dots */}
-        <div
-          style={{
-            position: 'absolute',
-            top: 120,
-            right: 180,
-            width: 4,
-            height: 4,
-            borderRadius: 2,
-            background: 'rgba(255,255,255,0.6)',
-            boxShadow: '0 0 12px rgba(255,255,255,0.8)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 220,
-            right: 120,
-            width: 6,
-            height: 6,
-            borderRadius: 3,
-            background: 'rgba(255,255,255,0.7)',
-            boxShadow: '0 0 14px rgba(255,255,255,0.9)',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: 180,
-            right: 280,
-            width: 3,
-            height: 3,
-            borderRadius: 2,
-            background: 'rgba(255,255,255,0.5)',
-          }}
-        />
+        {/* Darkening gradient overlay so text is readable on any image */}
+        {imageUrl && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background:
+                'linear-gradient(180deg, rgba(10,10,32,0.55) 0%, rgba(10,10,32,0.4) 40%, rgba(10,10,32,0.88) 100%)',
+              display: 'flex',
+            }}
+          />
+        )}
 
         {/* Header: brand */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 14,
+            position: 'relative',
+          }}
+        >
           <div style={{ fontSize: 44 }}>🌙</div>
           <div
             style={{
@@ -117,9 +111,10 @@ export async function GET(
             display: 'flex',
             flexDirection: 'column',
             flex: 1,
-            justifyContent: 'center',
-            gap: 28,
-            marginTop: 40,
+            justifyContent: 'flex-end',
+            gap: 24,
+            position: 'relative',
+            paddingBottom: 8,
           }}
         >
           <div
@@ -129,6 +124,7 @@ export async function GET(
               letterSpacing: 6,
               textTransform: 'uppercase',
               color: theme.accent,
+              textShadow: '0 1px 6px rgba(0,0,0,0.6)',
               display: 'block',
             }}
           >
@@ -137,13 +133,13 @@ export async function GET(
 
           <div
             style={{
-              fontSize: 82,
+              fontSize: 80,
               fontWeight: 800,
               lineHeight: 1.02,
               letterSpacing: -2,
               display: 'block',
               maxWidth: 1040,
-              textShadow: `0 2px 30px ${theme.glow}`,
+              textShadow: '0 3px 20px rgba(0,0,0,0.7)',
             }}
           >
             {title}
@@ -154,7 +150,6 @@ export async function GET(
               display: 'flex',
               alignItems: 'flex-start',
               gap: 18,
-              marginTop: 6,
               maxWidth: 1000,
             }}
           >
@@ -163,18 +158,18 @@ export async function GET(
                 width: 4,
                 alignSelf: 'stretch',
                 background: theme.accent,
-                opacity: 0.7,
+                opacity: 0.85,
                 borderRadius: 2,
               }}
             />
             <div
               style={{
-                fontSize: 30,
+                fontSize: 28,
                 lineHeight: 1.4,
                 fontStyle: 'italic',
-                opacity: 0.92,
                 display: 'block',
                 fontWeight: 400,
+                textShadow: '0 2px 10px rgba(0,0,0,0.8)',
               }}
             >
               {pullQuote}
@@ -189,8 +184,9 @@ export async function GET(
             alignItems: 'center',
             gap: 12,
             flexWrap: 'wrap',
-            borderTop: '1px solid rgba(255,255,255,0.15)',
-            paddingTop: 28,
+            borderTop: '1px solid rgba(255,255,255,0.25)',
+            paddingTop: 26,
+            position: 'relative',
           }}
         >
           {symbols.slice(0, 3).map((s) => (
@@ -199,8 +195,8 @@ export async function GET(
               style={{
                 padding: '10px 22px',
                 borderRadius: 999,
-                background: 'rgba(255,255,255,0.12)',
-                border: '1px solid rgba(255,255,255,0.2)',
+                background: 'rgba(0,0,0,0.35)',
+                border: '1px solid rgba(255,255,255,0.3)',
                 fontSize: 22,
                 fontWeight: 500,
               }}
@@ -212,9 +208,10 @@ export async function GET(
             style={{
               marginLeft: 'auto',
               fontSize: 22,
-              opacity: 0.85,
+              opacity: 0.95,
               fontWeight: 600,
               letterSpacing: 1,
+              textShadow: '0 1px 6px rgba(0,0,0,0.7)',
             }}
           >
             daily-dream.ai

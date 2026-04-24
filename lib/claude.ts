@@ -52,8 +52,13 @@ const INTERPRETATION_SCHEMA = {
       ],
       description: 'The dominant emotional tone of the dream.',
     },
+    image_prompt: {
+      type: 'string',
+      description:
+        'A single vivid sentence (under 60 words) describing the dream as a painterly, surreal dreamscape for an AI image generator. Focus on the most evocative imagery — landscape, objects, atmosphere, light, color. No specific people by name, no brand names, no text in the image, no faces in close-up. Paint the feeling, not the literal events.',
+    },
   },
-  required: ['title', 'narrative', 'symbols', 'insight', 'mood'],
+  required: ['title', 'narrative', 'symbols', 'insight', 'mood', 'image_prompt'],
   additionalProperties: false,
 };
 

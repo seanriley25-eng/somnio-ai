@@ -1,6 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { interpretDream, type PastDream } from '@/lib/claude';
+import { generateAndStoreDreamImage } from '@/lib/image';
 
 export const runtime = 'nodejs';
 export const maxDuration = 60;
@@ -52,6 +53,21 @@ export async function POST(request: Request) {
       { error: insertError?.message ?? 'insert_failed' },
       { status: 500 },
     );
+  }
+
+  // Generate and persist the dream image. Best-effort — if this fails, the
+  // interpretation still ships. image_url is patched in once the upload lands.
+  const imageUrl = await generateAndStoreDreamImage(
+    interpretation.image_prompt,
+    interpretation.mood,
+    inserted.share_id,
+  );
+
+  if (imageUrl) {
+    await supabase
+      .from('dreams')
+      .update({ image_url: imageUrl })
+      .eq('share_id', inserted.share_id);
   }
 
   return NextResponse.json({ share_id: inserted.share_id });

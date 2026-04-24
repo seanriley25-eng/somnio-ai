@@ -15,11 +15,13 @@ export type Interpretation = {
   symbols: DreamSymbol[];
   insight: string;
   mood: DreamMood;
+  image_prompt: string;
 };
 
-export type Dream = Interpretation & {
+export type Dream = Omit<Interpretation, 'image_prompt'> & {
   id: string;
   share_id: string;
   dream_text: string;
+  image_url: string | null;
   created_at: string;
 };

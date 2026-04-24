@@ -12,11 +12,11 @@ async function loadDream(share_id: string) {
   const supabase = await createClient();
   const { data } = await supabase
     .from('dreams')
-    .select('share_id, title, narrative, symbols, insight, mood, created_at')
+    .select('share_id, title, narrative, symbols, insight, mood, image_url, created_at')
     .eq('share_id', share_id)
     .maybeSingle();
   return data as
-    | (Pick<Dream, 'share_id' | 'title' | 'narrative' | 'symbols' | 'insight' | 'mood' | 'created_at'>)
+    | Pick<Dream, 'share_id' | 'title' | 'narrative' | 'symbols' | 'insight' | 'mood' | 'image_url' | 'created_at'>
     | null;
 }
 
@@ -62,6 +62,18 @@ export default async function DreamPage({ params }: { params: Promise<Params> })
         >
           ← Interpret another dream
         </Link>
+
+        {dream.image_url && (
+          <div className="glass-strong overflow-hidden glow">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={dream.image_url}
+              alt={dream.title}
+              className="w-full aspect-[16/9] object-cover"
+            />
+          </div>
+        )}
+
         <InterpretationView dream={dream} />
         <AdBlock size="banner" className="mt-12" />
       </div>

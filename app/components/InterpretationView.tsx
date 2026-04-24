@@ -16,7 +16,10 @@ import {
 import type { Dream } from '@/lib/types';
 
 interface InterpretationProps {
-  dream: Pick<Dream, 'share_id' | 'title' | 'narrative' | 'symbols' | 'insight' | 'mood'>;
+  dream: Pick<
+    Dream,
+    'share_id' | 'title' | 'narrative' | 'symbols' | 'insight' | 'mood' | 'image_url'
+  >;
 }
 
 export default function InterpretationView({ dream }: InterpretationProps) {
