@@ -1,379 +1,236 @@
 'use client';
 
-import { useState } from 'react';
-import { Search, BookOpen } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import Link from 'next/link';
+import { Search, BookOpen, ChevronRight } from 'lucide-react';
+import { getAllSymbols, getSymbolsByCategory, getSymbolCategories, CATEGORY_LABELS } from '@/lib/symbols/index';
 import AdBlock from '../components/AdBlock';
+import type { SymbolCategory } from '@/lib/symbols/types';
 
-const dreamSymbols = [
-  {
-    symbol: 'Snake',
-    category: 'Animals',
-    meaning: 'Transformation, healing, or hidden fears. Snakes often represent rebirth and the shedding of old patterns.',
-    keywords: ['transformation', 'fear', 'healing', 'rebirth']
-  },
-  {
-    symbol: 'Ocean',
-    category: 'Nature',
-    meaning: 'The unconscious mind, emotions, and vast possibilities. Calm oceans suggest peace, while stormy seas indicate emotional turmoil.',
-    keywords: ['emotion', 'unconscious', 'depth', 'vastness']
-  },
-  {
-    symbol: 'Falling',
-    category: 'Actions',
-    meaning: 'Loss of control, anxiety, or fear of failure. May indicate feeling overwhelmed in waking life.',
-    keywords: ['control', 'anxiety', 'fear', 'insecurity']
-  },
-  {
-    symbol: 'Flying',
-    category: 'Actions',
-    meaning: 'Freedom, transcendence, and liberation. Often represents breaking free from limitations or gaining new perspective.',
-    keywords: ['freedom', 'liberation', 'perspective', 'transcendence']
-  },
-  {
-    symbol: 'Teeth Falling Out',
-    category: 'Body',
-    meaning: 'Anxiety about appearance, communication issues, or fear of powerlessness. Common in times of transition.',
-    keywords: ['anxiety', 'appearance', 'communication', 'powerlessness']
-  },
-  {
-    symbol: 'House',
-    category: 'Places',
-    meaning: 'The self and psyche. Different rooms represent different aspects of your personality and life.',
-    keywords: ['self', 'psyche', 'identity', 'foundation']
-  },
-  {
-    symbol: 'Fire',
-    category: 'Elements',
-    meaning: 'Transformation, passion, anger, or purification. Can be destructive or renewing depending on context.',
-    keywords: ['passion', 'transformation', 'anger', 'purification']
-  },
-  {
-    symbol: 'Death',
-    category: 'Events',
-    meaning: 'Endings and new beginnings, transformation, or letting go. Rarely literal, usually symbolic of change.',
-    keywords: ['endings', 'transformation', 'change', 'release']
-  },
-  {
-    symbol: 'Baby',
-    category: 'People',
-    meaning: 'New beginnings, innocence, vulnerability, or a new project/idea taking form in your life.',
-    keywords: ['new beginnings', 'innocence', 'potential', 'vulnerability']
-  },
-  {
-    symbol: 'Spider',
-    category: 'Animals',
-    meaning: 'Creativity, feminine energy, or feeling trapped. Spiders weave their reality and represent creation.',
-    keywords: ['creativity', 'feminine', 'trapped', 'weaving']
-  },
-  {
-    symbol: 'Labyrinth',
-    category: 'Places',
-    meaning: 'Life\'s journey, confusion, or the search for meaning. Represents the path to self-discovery.',
-    keywords: ['journey', 'confusion', 'seeking', 'discovery']
-  },
-  {
-    symbol: 'Mirror',
-    category: 'Objects',
-    meaning: 'Self-reflection, truth, or how you see yourself. May reveal aspects of yourself you\'ve been avoiding.',
-    keywords: ['reflection', 'truth', 'self-image', 'awareness']
-  },
-  {
-    symbol: 'Car',
-    category: 'Objects',
-    meaning: 'Your drive and direction in life. The condition and control of the car reflect your current life path.',
-    keywords: ['direction', 'control', 'journey', 'drive']
-  },
-  {
-    symbol: 'Bridge',
-    category: 'Places',
-    meaning: 'Transition, connection, or crossing from one phase to another. Represents change and passage.',
-    keywords: ['transition', 'connection', 'passage', 'change']
-  },
-  {
-    symbol: 'Rain',
-    category: 'Nature',
-    meaning: 'Emotional release, cleansing, or renewal. Can represent sadness or the washing away of old patterns.',
-    keywords: ['cleansing', 'emotion', 'renewal', 'release']
-  },
-  {
-    symbol: 'Wolf',
-    category: 'Animals',
-    meaning: 'Instinct, loyalty, and guardianship. Wolves in dreams often symbolize your wild nature, independence, or a need to trust your intuition. Can also represent a threat or feeling hunted.',
-    keywords: ['instinct', 'loyalty', 'independence', 'intuition', 'threat']
-  },
-  {
-    symbol: 'Owl',
-    category: 'Animals',
-    meaning: 'Wisdom, intuition, and seeing through deception. Owls represent your ability to perceive hidden truths and navigate darkness. May signal a need for deeper insight.',
-    keywords: ['wisdom', 'intuition', 'truth', 'perception', 'night']
-  },
-  {
-    symbol: 'Butterfly',
-    category: 'Animals',
-    meaning: 'Transformation, rebirth, and personal growth. The butterfly\'s metamorphosis mirrors your own evolution and the beauty that emerges from change.',
-    keywords: ['transformation', 'rebirth', 'growth', 'beauty', 'change']
-  },
-  {
-    symbol: 'Dog',
-    category: 'Animals',
-    meaning: 'Loyalty, friendship, protection, and unconditional love. Dogs represent faithful relationships or aspects of yourself that are trustworthy and devoted.',
-    keywords: ['loyalty', 'friendship', 'protection', 'devotion', 'trust']
-  },
-  {
-    symbol: 'Storm',
-    category: 'Nature',
-    meaning: 'Emotional upheaval, conflict, or dramatic change. Storms represent turbulent feelings or situations that are disrupting your sense of calm and stability.',
-    keywords: ['upheaval', 'conflict', 'turbulence', 'drama', 'chaos']
-  },
-  {
-    symbol: 'Forest',
-    category: 'Nature',
-    meaning: 'The unknown, mystery, and unexplored aspects of the psyche. Dense forests can represent feeling lost, while peaceful woods suggest connection with nature and your inner self.',
-    keywords: ['mystery', 'unknown', 'exploration', 'nature', 'lost']
-  },
-  {
-    symbol: 'Mountain',
-    category: 'Nature',
-    meaning: 'Obstacles, goals, and spiritual ascension. Climbing a mountain represents ambition and struggle, while viewing from the peak symbolizes achievement and perspective.',
-    keywords: ['obstacles', 'goals', 'achievement', 'struggle', 'perspective']
-  },
-  {
-    symbol: 'Moon',
-    category: 'Nature',
-    meaning: 'Feminine energy, intuition, and the unconscious. The moon\'s phases reflect cycles of change, emotions, and hidden aspects of yourself coming to light.',
-    keywords: ['feminine', 'intuition', 'cycles', 'unconscious', 'mystery']
-  },
-  {
-    symbol: 'Flowers',
-    category: 'Nature',
-    meaning: 'Growth, beauty, and the blossoming of potential. Different flowers carry unique meanings, but generally represent joy, love, and the flowering of new aspects of self.',
-    keywords: ['growth', 'beauty', 'potential', 'joy', 'blossoming']
-  },
-  {
-    symbol: 'Running',
-    category: 'Actions',
-    meaning: 'Escape, pursuit, or urgency. Running away suggests avoidance of problems, while running toward something indicates ambition. Being unable to run reflects feeling stuck.',
-    keywords: ['escape', 'pursuit', 'urgency', 'avoidance', 'stuck']
-  },
-  {
-    symbol: 'Swimming',
-    category: 'Actions',
-    meaning: 'Navigating emotions and the unconscious. Easy swimming suggests emotional mastery, while struggling represents being overwhelmed by feelings or circumstances.',
-    keywords: ['emotions', 'navigation', 'flow', 'struggle', 'immersion']
-  },
-  {
-    symbol: 'Hiding',
-    category: 'Actions',
-    meaning: 'Avoidance, shame, or protecting yourself. Hiding reflects fear of being seen, vulnerability, or aspects of yourself you\'re keeping concealed from others or yourself.',
-    keywords: ['avoidance', 'shame', 'fear', 'vulnerability', 'concealment']
-  },
-  {
-    symbol: 'Fighting',
-    category: 'Actions',
-    meaning: 'Internal or external conflict, aggression, or standing up for yourself. Fighting dreams often mirror real-life struggles or the battle between different parts of your psyche.',
-    keywords: ['conflict', 'aggression', 'struggle', 'defense', 'confrontation']
-  },
-  {
-    symbol: 'Dancing',
-    category: 'Actions',
-    meaning: 'Joy, freedom, and self-expression. Dancing represents harmony, celebration, and being in flow with life. Can also symbolize courtship or social connection.',
-    keywords: ['joy', 'freedom', 'expression', 'harmony', 'celebration']
-  },
-  {
-    symbol: 'Old Man',
-    category: 'People',
-    meaning: 'Wisdom, guidance, and the sage archetype. Often represents your inner wisdom, a mentor figure, or connection to ancestral knowledge and life experience.',
-    keywords: ['wisdom', 'guidance', 'mentor', 'experience', 'sage']
-  },
-  {
-    symbol: 'Stranger',
-    category: 'People',
-    meaning: 'Unknown aspects of yourself, new opportunities, or the shadow self. Strangers often represent parts of your personality you haven\'t yet integrated or acknowledged.',
-    keywords: ['unknown', 'shadow', 'potential', 'mystery', 'aspects']
-  },
-  {
-    symbol: 'Child',
-    category: 'People',
-    meaning: 'Inner child, innocence, or unhealed wounds. May represent your younger self, playfulness, or aspects of childhood that need attention or healing.',
-    keywords: ['inner child', 'innocence', 'playfulness', 'healing', 'youth']
-  },
-  {
-    symbol: 'Celebrity',
-    category: 'People',
-    meaning: 'Aspiration, desired qualities, or recognition. Celebrities represent traits you admire or wish to embody. Can also reflect desires for fame, validation, or being seen.',
-    keywords: ['aspiration', 'recognition', 'admiration', 'qualities', 'fame']
-  },
-  {
-    symbol: 'Ghost',
-    category: 'People',
-    meaning: 'Unresolved past, haunting memories, or lingering emotions. Ghosts represent things from your past that still have power over you or need closure.',
-    keywords: ['past', 'unresolved', 'haunting', 'memory', 'closure']
-  },
-  {
-    symbol: 'Key',
-    category: 'Objects',
-    meaning: 'Solutions, access, and unlocking potential. Keys represent answers to problems, opportunities, or the power to unlock new areas of your life or understanding.',
-    keywords: ['solution', 'access', 'opportunity', 'unlock', 'power']
-  },
-  {
-    symbol: 'Clock',
-    category: 'Objects',
-    meaning: 'Time pressure, deadlines, or awareness of mortality. Clocks reflect anxiety about time running out, missed opportunities, or the need to be present in the moment.',
-    keywords: ['time', 'pressure', 'deadline', 'mortality', 'urgency']
-  },
-  {
-    symbol: 'Money',
-    category: 'Objects',
-    meaning: 'Value, self-worth, and resources. Finding money suggests discovering inner resources, while losing it reflects fears of inadequacy or financial anxiety.',
-    keywords: ['value', 'worth', 'resources', 'abundance', 'security']
-  },
-  {
-    symbol: 'Ring',
-    category: 'Objects',
-    meaning: 'Commitment, unity, and eternal bonds. Rings symbolize promises, marriage, loyalty, or the completion of a cycle. Lost rings suggest broken commitments or identity.',
-    keywords: ['commitment', 'unity', 'promise', 'marriage', 'completion']
-  },
-  {
-    symbol: 'Ladder',
-    category: 'Objects',
-    meaning: 'Progress, ascension, and social mobility. Climbing up represents advancement and ambition, while descending may indicate regression or exploring the unconscious.',
-    keywords: ['progress', 'ascension', 'ambition', 'advancement', 'climb']
-  },
-  {
-    symbol: 'Hospital',
-    category: 'Places',
-    meaning: 'Healing, vulnerability, and need for care. Hospitals represent areas of your life requiring attention, recovery from trauma, or fears about health and mortality.',
-    keywords: ['healing', 'vulnerability', 'care', 'recovery', 'health']
-  },
-  {
-    symbol: 'School',
-    category: 'Places',
-    meaning: 'Learning, testing, and social anxiety. School dreams often reflect feelings of being judged, unprepared, or lessons you\'re currently learning in life.',
-    keywords: ['learning', 'testing', 'anxiety', 'judgment', 'preparation']
-  },
-  {
-    symbol: 'Church',
-    category: 'Places',
-    meaning: 'Spirituality, morality, and seeking higher meaning. Churches represent your relationship with the divine, moral questions, or the search for spiritual guidance and community.',
-    keywords: ['spirituality', 'morality', 'sacred', 'guidance', 'faith']
-  },
-  {
-    symbol: 'Island',
-    category: 'Places',
-    meaning: 'Isolation, independence, or sanctuary. Islands can represent feeling alone or cut off, but also symbolize self-sufficiency, escape, and a personal paradise.',
-    keywords: ['isolation', 'independence', 'sanctuary', 'solitude', 'escape']
-  },
-  {
-    symbol: 'Desert',
-    category: 'Places',
-    meaning: 'Spiritual journey, emptiness, or barrenness. Deserts represent feeling depleted, searching for meaning, or the purification that comes through periods of scarcity.',
-    keywords: ['emptiness', 'journey', 'barrenness', 'purification', 'solitude']
-  },
-];
+const ALL_SYMBOLS = getAllSymbols();
+const ALL_CATEGORIES = getSymbolCategories();
 
+// ---------------------------------------------------------------------------
+// Category tab pill
+// ---------------------------------------------------------------------------
+function CategoryTab({
+  label,
+  active,
+  onClick,
+  count,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+  count: number;
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`flex items-center space-x-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
+        active
+          ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg shadow-purple-500/20'
+          : 'glass border border-purple-500/20 text-gray-300 hover:border-purple-400/50 hover:text-purple-300'
+      }`}
+    >
+      <span>{label}</span>
+      <span
+        className={`text-xs px-1.5 py-0.5 rounded-full ${
+          active ? 'bg-white/20 text-white' : 'bg-purple-500/20 text-purple-300'
+        }`}
+      >
+        {count}
+      </span>
+    </button>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Symbol card
+// ---------------------------------------------------------------------------
+function SymbolCard({ symbol }: { symbol: ReturnType<typeof getAllSymbols>[0] }) {
+  return (
+    <Link
+      href={`/dictionary/${symbol.slug}`}
+      className="glass-strong rounded-xl p-5 border border-purple-500/20 hover:border-purple-400/50 hover:bg-purple-500/10 transition-all group flex flex-col"
+    >
+      <div className="flex items-start justify-between gap-2 mb-3">
+        <div className="flex items-center space-x-2 min-w-0">
+          <BookOpen className="w-4 h-4 text-purple-400 flex-shrink-0" />
+          <h2 className="text-lg font-bold text-purple-300 group-hover:text-purple-200 transition-colors truncate">
+            {symbol.name}
+          </h2>
+        </div>
+        <span className="flex-shrink-0 text-xs px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-400/20">
+          {CATEGORY_LABELS[symbol.category]}
+        </span>
+      </div>
+
+      <p className="text-gray-300 text-sm leading-relaxed line-clamp-2 flex-1">
+        {symbol.quickMeaning}
+      </p>
+
+      <div className="mt-3 flex items-center space-x-1 text-xs text-purple-400 group-hover:text-purple-300 transition-colors">
+        <span>Full interpretation</span>
+        <ChevronRight className="w-3 h-3" />
+      </div>
+    </Link>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Page
+// ---------------------------------------------------------------------------
 export default function DictionaryPage() {
-  const [searchTerm, setSearchTerm] = useState('');
+  const [search, setSearch] = useState('');
+  const [activeCategory, setActiveCategory] = useState<SymbolCategory | 'all'>('all');
 
-  const filteredSymbols = dreamSymbols.filter(
-    (item) =>
-      item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.meaning.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      item.keywords.some(keyword => keyword.toLowerCase().includes(searchTerm.toLowerCase()))
+  const filtered = useMemo(() => {
+    const q = search.toLowerCase().trim();
+
+    const base =
+      activeCategory === 'all'
+        ? ALL_SYMBOLS
+        : getSymbolsByCategory(activeCategory);
+
+    if (!q) return base;
+
+    return base.filter(
+      (s) =>
+        s.name.toLowerCase().includes(q) ||
+        s.quickMeaning.toLowerCase().includes(q) ||
+        s.aliases.some((a) => a.toLowerCase().includes(q)),
+    );
+  }, [search, activeCategory]);
+
+  const totalByCategory = useMemo(
+    () =>
+      Object.fromEntries(
+        ALL_CATEGORIES.map((c) => [c, getSymbolsByCategory(c).length]),
+      ),
+    [],
   );
 
   return (
-    <div className="min-h-screen pt-24 pb-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen pt-24 pb-16 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-12">
+
+        {/* ── Header ── */}
+        <div className="text-center mb-10">
           <h1 className="text-5xl md:text-6xl font-bold mb-4 bg-gradient-to-r from-purple-400 via-pink-400 to-purple-500 bg-clip-text text-transparent">
-            Dream Dictionary
+            Dream Symbol Dictionary
           </h1>
           <p className="text-gray-300 text-lg max-w-2xl mx-auto">
-            Explore common dream symbols and their meanings. Understanding these archetypes can help unlock deeper insights into your dreams.
+            A-Z guide to dream meanings — Jungian, Freudian, and cross-cultural interpretations
+            for the symbols your sleeping mind keeps returning to.
           </p>
         </div>
 
-        {/* Top Ad */}
+        {/* ── Top ad ── */}
         <AdBlock size="banner" className="mb-8" />
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-3">
-            {/* Search Bar */}
-            <div className="glass-strong p-6 mb-8">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search symbols (e.g., 'snake', 'flying', 'water')..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full glass pl-12 pr-4 py-4 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
-              </div>
-            </div>
-
-            {/* Symbol Grid */}
-            <div className="grid gap-6">
-              {filteredSymbols.map((item, index) => (
-                <div key={index} className="glass-strong p-6 hover:bg-purple-500/10 transition-all">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center space-x-3">
-                      <BookOpen className="w-6 h-6 text-purple-400" />
-                      <h3 className="text-2xl font-bold text-purple-300">{item.symbol}</h3>
-                    </div>
-                    <span className="text-xs px-3 py-1 glass rounded-full text-pink-400">
-                      {item.category}
-                    </span>
-                  </div>
-                  <p className="text-gray-300 leading-relaxed mb-3">{item.meaning}</p>
-                  <div className="flex flex-wrap gap-2">
-                    {item.keywords.map((keyword, kIndex) => (
-                      <span
-                        key={kIndex}
-                        className="text-xs px-2 py-1 bg-purple-500/20 text-purple-300 rounded"
-                      >
-                        {keyword}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {filteredSymbols.length === 0 && (
-              <div className="glass-strong p-12 text-center">
-                <p className="text-gray-400 text-lg">
-                  No symbols found matching "{searchTerm}". Try a different search term.
-                </p>
-              </div>
+        {/* ── Search ── */}
+        <div className="glass-strong rounded-2xl p-4 mb-6 border border-purple-500/20">
+          <div className="relative">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
+            <input
+              type="search"
+              placeholder="Search symbols (e.g. 'snake', 'water', 'falling')..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="w-full glass rounded-xl pl-12 pr-4 py-3 text-gray-200 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-transparent"
+            />
+            {search && (
+              <button
+                onClick={() => setSearch('')}
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-300"
+                aria-label="Clear search"
+              >
+                ✕
+              </button>
             )}
-
-            {/* Bottom Ad */}
-            <AdBlock size="rectangle" className="mt-8 mx-auto" />
           </div>
+        </div>
 
-          {/* Sidebar */}
-          <div className="lg:col-span-1 space-y-6">
-            <div className="glass-strong p-6">
-              <h3 className="text-xl font-bold text-purple-300 mb-4">Categories</h3>
-              <div className="space-y-2">
-                {['Animals', 'Nature', 'Actions', 'Places', 'Objects', 'People', 'Events', 'Body', 'Elements'].map(
-                  (category, index) => (
-                    <button
-                      key={index}
-                      className="w-full text-left px-3 py-2 glass hover:bg-purple-500/20 text-gray-300 transition-all rounded"
-                    >
-                      {category}
-                    </button>
-                  )
-                )}
-              </div>
-            </div>
+        {/* ── Category tabs ── */}
+        <div className="flex flex-wrap gap-2 mb-8">
+          <CategoryTab
+            label="All"
+            active={activeCategory === 'all'}
+            onClick={() => setActiveCategory('all')}
+            count={ALL_SYMBOLS.length}
+          />
+          {ALL_CATEGORIES.map((cat) => (
+            <CategoryTab
+              key={cat}
+              label={CATEGORY_LABELS[cat]}
+              active={activeCategory === cat}
+              onClick={() => setActiveCategory(activeCategory === cat ? 'all' : cat)}
+              count={totalByCategory[cat] ?? 0}
+            />
+          ))}
+        </div>
 
-            <AdBlock size="sidebar" />
+        {/* ── Results count ── */}
+        {(search || activeCategory !== 'all') && (
+          <p className="text-gray-500 text-sm mb-4">
+            {filtered.length === 0
+              ? 'No symbols found'
+              : `${filtered.length} symbol${filtered.length === 1 ? '' : 's'} found`}
+            {activeCategory !== 'all' && ` in ${CATEGORY_LABELS[activeCategory]}`}
+            {search && ` matching "${search}"`}
+          </p>
+        )}
+
+        {/* ── Symbol grid ── */}
+        {filtered.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {filtered.map((symbol) => (
+              <SymbolCard key={symbol.slug} symbol={symbol} />
+            ))}
           </div>
+        ) : (
+          <div className="glass-strong rounded-2xl p-12 text-center mb-10">
+            <p className="text-gray-400 text-lg mb-2">
+              No symbols found
+              {search ? ` matching "${search}"` : ''}
+              {activeCategory !== 'all' ? ` in ${CATEGORY_LABELS[activeCategory]}` : ''}.
+            </p>
+            <p className="text-gray-500 text-sm">
+              We&apos;re adding new symbols every week.{' '}
+              <button
+                onClick={() => { setSearch(''); setActiveCategory('all'); }}
+                className="text-purple-400 hover:text-purple-300 underline"
+              >
+                Browse all symbols
+              </button>{' '}
+              or{' '}
+              <Link href="/" className="text-purple-400 hover:text-purple-300 underline">
+                interpret a dream directly
+              </Link>
+              .
+            </p>
+          </div>
+        )}
+
+        {/* ── Bottom ad ── */}
+        <AdBlock size="banner" />
+
+        {/* ── CTA ── */}
+        <div className="mt-10 glass rounded-2xl p-8 border border-purple-500/20 text-center">
+          <h2 className="text-2xl font-bold text-white mb-2">
+            Can&apos;t find your symbol?
+          </h2>
+          <p className="text-gray-300 mb-6">
+            Describe your dream to Somnio and our AI will identify and interpret the specific
+            symbols in your dream — no dictionary lookup needed.
+          </p>
+          <Link
+            href="/"
+            className="inline-flex items-center space-x-2 px-8 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-medium transition-all"
+          >
+            <span>Interpret my dream →</span>
+          </Link>
         </div>
       </div>
     </div>
