@@ -29,19 +29,42 @@ export async function generateMetadata({
   const symbol = getSymbolBySlug(slug);
   if (!symbol) return {};
 
-  const title = `${symbol.name} Dream Meaning — Jungian, Freudian & Cultural Interpretations`;
-  const description = `${symbol.quickMeaning} Explore Jungian, Freudian, and cross-cultural perspectives on the ${symbol.name.toLowerCase()} dream symbol.`;
+  const title = `Dreaming About ${symbol.name} — Meanings & Symbolism | Somnio`;
+  const description =
+    `${symbol.quickMeaning} ` +
+    `This guide covers Jungian and Freudian interpretations, ` +
+    `${symbol.commonMeanings.length} common dream scenarios, cultural perspectives, ` +
+    `and frequently asked questions about the ${symbol.name.toLowerCase()} dream symbol.`;
+
+  const keywords = [
+    symbol.name.toLowerCase(),
+    `${symbol.name.toLowerCase()} dream`,
+    `${symbol.name.toLowerCase()} dream meaning`,
+    `${symbol.name.toLowerCase()} dream interpretation`,
+    `dreaming about ${symbol.name.toLowerCase()}`,
+    `what does dreaming about ${symbol.name.toLowerCase()} mean`,
+    'dream meaning',
+    'dream interpretation',
+    'dream symbolism',
+    ...symbol.aliases,
+  ];
 
   return {
     title,
     description,
-    keywords: [
-      `${symbol.name.toLowerCase()} dream`,
-      `dream about ${symbol.name.toLowerCase()}`,
-      `${symbol.name.toLowerCase()} dream meaning`,
-      ...symbol.aliases,
-    ],
-    openGraph: { title, description, type: 'article' },
+    keywords,
+    openGraph: {
+      title,
+      description,
+      type: 'article',
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/og-image.png'],
+    },
     alternates: {
       canonical: `https://daily-dream.ai/dictionary/${symbol.slug}`,
     },

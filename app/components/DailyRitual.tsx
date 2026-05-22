@@ -1,13 +1,16 @@
 'use client';
 
 import { TrendingUp, Archive, Flame } from 'lucide-react';
+import Link from 'next/link';
 
-const globalDreamCloud = [
-  { symbol: 'Flying', trend: 'up', count: '2.4k' },
-  { symbol: 'Water', trend: 'up', count: '1.8k' },
+// slug is set only when a /dictionary/[slug] page exists for that symbol.
+// Symbols without a page render as plain text — no broken links.
+const globalDreamCloud: { symbol: string; trend: string; count: string; slug?: string }[] = [
+  { symbol: 'Flying',    trend: 'up',   count: '2.4k', slug: 'flying' },
+  { symbol: 'Water',     trend: 'up',   count: '1.8k', slug: 'water'  },
   { symbol: 'Labyrinth', trend: 'same', count: '1.2k' },
-  { symbol: 'Animals', trend: 'down', count: '980' },
-  { symbol: 'Light', trend: 'up', count: '856' },
+  { symbol: 'Animals',   trend: 'down', count: '980'  },
+  { symbol: 'Light',     trend: 'up',   count: '856'  },
 ];
 
 const userSymbols = [
@@ -36,7 +39,16 @@ export default function DailyRitual() {
             >
               <div className="flex items-center space-x-3">
                 <Flame className="w-4 h-4 text-orange-400" />
-                <span className="text-gray-200 font-medium">{item.symbol}</span>
+                {item.slug ? (
+                  <Link
+                    href={`/dictionary/${item.slug}`}
+                    className="text-gray-200 font-medium hover:text-purple-300 transition-colors"
+                  >
+                    {item.symbol}
+                  </Link>
+                ) : (
+                  <span className="text-gray-200 font-medium">{item.symbol}</span>
+                )}
               </div>
               <div className="flex items-center space-x-2">
                 <span className="text-xs text-gray-500">{item.count}</span>
