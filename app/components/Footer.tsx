@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Moon, BookOpen, Sparkles, FileText } from 'lucide-react';
+import { Moon, BookOpen, Sparkles, FileText, Info, Mail } from 'lucide-react';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -53,6 +53,20 @@ export default function Footer() {
                 <FileText className="w-4 h-4 group-hover:scale-110 transition-transform" />
                 <span>Blog</span>
               </Link>
+              <Link
+                href="/about"
+                className="flex items-center space-x-2 text-gray-300 hover:text-purple-300 transition-colors group"
+              >
+                <Info className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span>About</span>
+              </Link>
+              <Link
+                href="/contact"
+                className="flex items-center space-x-2 text-gray-300 hover:text-purple-300 transition-colors group"
+              >
+                <Mail className="w-4 h-4 group-hover:scale-110 transition-transform" />
+                <span>Contact</span>
+              </Link>
             </nav>
           </div>
 
@@ -78,7 +92,21 @@ export default function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="mt-12 pt-8 border-t border-purple-500/10">
+        <div className="mt-12 pt-8 border-t border-purple-500/10 space-y-3">
+          <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <Link href="/privacy" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
+              Privacy Policy
+            </Link>
+            <Link href="/terms" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
+              Terms of Service
+            </Link>
+            <Link href="/about" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
+              About
+            </Link>
+            <Link href="/contact" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
+              Contact
+            </Link>
+          </div>
           <p className="text-center text-gray-500 text-sm">
             Made with <span className="text-purple-400">✨</span> for dreamers everywhere
           </p>
