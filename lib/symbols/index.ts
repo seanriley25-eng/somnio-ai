@@ -4,6 +4,22 @@ import flying from './data/flying';
 import water from './data/water';
 import snakes from './data/snakes';
 import beingChased from './data/being-chased';
+// Phase 2b — 15 new symbols
+import falling from './data/falling';
+import death from './data/death';
+import naked from './data/naked';
+import spiders from './data/spiders';
+import cheating from './data/cheating';
+import pregnancy from './data/pregnancy';
+import fire from './data/fire';
+import babies from './data/babies';
+import ex from './data/ex';
+import house from './data/house';
+import school from './data/school';
+import money from './data/money';
+import blood from './data/blood';
+import crying from './data/crying';
+import hospital from './data/hospital';
 
 // ---------------------------------------------------------------------------
 // Registry — add new symbols here as batches are added in Phase 2+
@@ -14,6 +30,22 @@ const ALL_SYMBOLS: DreamSymbol[] = [
   water,
   snakes,
   beingChased,
+  // Phase 2b
+  falling,
+  death,
+  naked,
+  spiders,
+  cheating,
+  pregnancy,
+  fire,
+  babies,
+  ex,
+  house,
+  school,
+  money,
+  blood,
+  crying,
+  hospital,
 ];
 
 // ---------------------------------------------------------------------------
