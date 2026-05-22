@@ -40,19 +40,28 @@ export default function CookieConsent() {
   });
 
   useEffect(() => {
+    // Show banner on first visit; re-apply stored consent on return visits.
     try {
       const stored = localStorage.getItem(STORAGE_KEY);
       if (!stored) {
-        // No prior choice — show banner after a short delay
         const t = setTimeout(() => setVisible(true), 800);
         return () => clearTimeout(t);
       }
-      // Re-apply previously stored consent on every page load
       const parsed = JSON.parse(stored) as { prefs: ConsentPrefs };
       applyConsent(parsed.prefs);
     } catch {
       setVisible(true);
     }
+  }, []);
+
+  // Allow the footer "Cookie Preferences" button to reopen the panel.
+  useEffect(() => {
+    const handler = () => {
+      setShowCustomize(false);
+      setVisible(true);
+    };
+    window.addEventListener('somnio:open-cookie-prefs', handler);
+    return () => window.removeEventListener('somnio:open-cookie-prefs', handler);
   }, []);
 
   function save(prefs: ConsentPrefs, choice: ConsentChoice) {

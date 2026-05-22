@@ -94,18 +94,24 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className="mt-12 pt-8 border-t border-purple-500/10 space-y-3">
           <div className="flex flex-wrap justify-center gap-x-6 gap-y-2">
+            <Link href="/about" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
+              About
+            </Link>
             <Link href="/privacy" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
               Privacy Policy
             </Link>
             <Link href="/terms" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
               Terms of Service
             </Link>
-            <Link href="/about" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
-              About
-            </Link>
             <Link href="/contact" className="text-gray-500 hover:text-purple-400 text-xs transition-colors">
               Contact
             </Link>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('somnio:open-cookie-prefs'))}
+              className="text-gray-500 hover:text-purple-400 text-xs transition-colors cursor-pointer"
+            >
+              Cookie Preferences
+            </button>
           </div>
           <p className="text-center text-gray-500 text-sm">
             Made with <span className="text-purple-400">✨</span> for dreamers everywhere
