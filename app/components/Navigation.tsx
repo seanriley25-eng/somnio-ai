@@ -49,9 +49,6 @@ export default function Navigation() {
             <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
               Somnio
             </span>
-            <span className="px-2 py-0.5 text-xs font-semibold bg-purple-500/20 text-purple-300 border border-purple-400/30 rounded-full">
-              Beta
-            </span>
           </Link>
 
           <div className="flex items-center space-x-2 md:space-x-4">
