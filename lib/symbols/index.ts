@@ -20,6 +20,27 @@ import money from './data/money';
 import blood from './data/blood';
 import crying from './data/crying';
 import hospital from './data/hospital';
+// Phase 2c — 20 new symbols
+import car from './data/car';
+import drowning from './data/drowning';
+import dogs from './data/dogs';
+import cats from './data/cats';
+import bears from './data/bears';
+import wolves from './data/wolves';
+import horses from './data/horses';
+import ocean from './data/ocean';
+import snow from './data/snow';
+import tornado from './data/tornado';
+import storms from './data/storms';
+import earthquake from './data/earthquake';
+import flood from './data/flood';
+import lightning from './data/lightning';
+import ghost from './data/ghost';
+import zombies from './data/zombies';
+import killing from './data/killing';
+import wedding from './data/wedding';
+import funeral from './data/funeral';
+import mirror from './data/mirror';
 
 // ---------------------------------------------------------------------------
 // Registry — add new symbols here as batches are added in Phase 2+
@@ -46,6 +67,27 @@ const ALL_SYMBOLS: DreamSymbol[] = [
   blood,
   crying,
   hospital,
+  // Phase 2c
+  car,
+  drowning,
+  dogs,
+  cats,
+  bears,
+  wolves,
+  horses,
+  ocean,
+  snow,
+  tornado,
+  storms,
+  earthquake,
+  flood,
+  lightning,
+  ghost,
+  zombies,
+  killing,
+  wedding,
+  funeral,
+  mirror,
 ];
 
 // ---------------------------------------------------------------------------
