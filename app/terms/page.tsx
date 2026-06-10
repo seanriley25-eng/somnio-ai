@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = 'May 22, 2025';
+const LAST_UPDATED = 'June 10, 2026';
 
 export default function TermsPage() {
   return (
@@ -24,9 +24,10 @@ export default function TermsPage() {
           <section className="glass rounded-2xl p-8 border border-purple-500/20">
             <p>
               These Terms of Service (&quot;Terms&quot;) govern your access to and use of Somnio,
-              operated at <strong>daily-dream.ai</strong> (&quot;we&quot;, &quot;us&quot;, or
-              &quot;Somnio&quot;). By creating an account or using the service, you agree to these
-              Terms. If you do not agree, do not use the service.
+              operated by <strong>Farallone Media LLC</strong> at <strong>daily-dreams.ai</strong>{' '}
+              (&quot;we&quot;, &quot;us&quot;, or &quot;Somnio&quot;). By creating an account or
+              using the service, you agree to these Terms. If you do not agree, do not use the
+              service.
             </p>
           </section>
 
@@ -145,10 +146,10 @@ export default function TermsPage() {
               You are responsible for maintaining the security of your account credentials. You
               must not share your account with others. Notify us immediately at{' '}
               <a
-                href="mailto:sean@riley-solutions.com"
+                href="mailto:privacy@farallone.com"
                 className="text-purple-400 hover:text-purple-300 underline"
               >
-                sean@riley-solutions.com
+                privacy@farallone.com
               </a>{' '}
               if you suspect unauthorised access.
             </p>
@@ -218,10 +219,11 @@ export default function TermsPage() {
           <section className="glass rounded-2xl p-8 border border-purple-500/20">
             <h2 className="text-2xl font-semibold text-white mb-4">8. Governing Law</h2>
             <p className="mb-3">
-              These Terms are governed by the laws of the State of Florida, United States, without
-              regard to conflict-of-law provisions. Any dispute arising from these Terms or your
-              use of the service shall be resolved exclusively in the state or federal courts
-              located in Florida, and you consent to the personal jurisdiction of those courts.
+              These Terms are governed by the laws of the State of California, United States,
+              without regard to conflict-of-law provisions. Any dispute arising from these Terms or
+              your use of the service shall be resolved exclusively in the state or federal courts
+              located in California, and you consent to the personal jurisdiction of those courts.
+              Farallone Media LLC is the operating entity for this service.
             </p>
             <p>
               If any provision of these Terms is found to be unenforceable, the remaining
@@ -245,10 +247,10 @@ export default function TermsPage() {
             <p>
               Questions about these Terms? Reach us at{' '}
               <a
-                href="mailto:sean@riley-solutions.com"
+                href="mailto:privacy@farallone.com"
                 className="text-purple-400 hover:text-purple-300 underline"
               >
-                sean@riley-solutions.com
+                privacy@farallone.com
               </a>{' '}
               or via our{' '}
               <Link href="/contact" className="text-purple-400 hover:text-purple-300 underline">

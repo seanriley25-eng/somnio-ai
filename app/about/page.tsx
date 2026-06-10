@@ -3,13 +3,13 @@ import Link from 'next/link';
 import { Moon, Brain, Sparkles, Shield } from 'lucide-react';
 
 export const metadata: Metadata = {
-  title: 'About Somnio — AI Dream Interpretation',
+  title: 'About daily-dreams.ai — AI Dream Interpretation',
   description:
-    'Learn how Somnio uses Claude AI and FLUX image generation to explore your dreams through Jungian, Freudian, and cultural dream traditions.',
+    'daily-dreams.ai is an AI-powered dream interpretation tool operated by Farallone Media LLC. Learn how we use Claude AI and FLUX image generation to explore your dreams.',
   openGraph: {
-    title: 'About Somnio — AI Dream Interpretation',
+    title: 'About daily-dreams.ai — AI Dream Interpretation',
     description:
-      'Learn how Somnio uses Claude AI and FLUX image generation to explore your dreams through Jungian, Freudian, and cultural dream traditions.',
+      'daily-dreams.ai is an AI-powered dream interpretation tool operated by Farallone Media LLC. Learn how we use Claude AI and FLUX image generation to explore your dreams.',
     type: 'website',
   },
 };
@@ -151,9 +151,10 @@ export default function AboutPage() {
               <h2 className="text-2xl font-semibold text-white">Built By & Important Disclaimer</h2>
             </div>
             <p className="mb-4">
-              Somnio is an independent project built by a solo developer with a long-standing
-              interest in depth psychology, AI, and the science of sleep. It is designed as a
-              thoughtful tool for self-reflection and creative exploration — not a clinical service.
+              daily-dreams.ai is operated by <strong>Farallone Media LLC</strong>. Somnio is
+              designed as a thoughtful tool for self-reflection and creative exploration{' '}
+              using AI-powered dream interpretation{' '}
+              rooted in depth psychology and cultural tradition. It is not a clinical service.
             </p>
             <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-xl p-4">
               <p className="text-yellow-200 text-sm font-medium mb-1">Important</p>
