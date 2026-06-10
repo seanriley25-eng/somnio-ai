@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   robots: { index: true, follow: true },
 };
 
-const LAST_UPDATED = 'May 22, 2025';
+const LAST_UPDATED = 'June 10, 2026';
 
 export default function PrivacyPage() {
   return (
@@ -24,7 +24,8 @@ export default function PrivacyPage() {
           <section className="glass rounded-2xl p-8 border border-purple-500/20">
             <p>
               This Privacy Policy explains how Somnio (&quot;we&quot;, &quot;us&quot;, or
-              &quot;our&quot;), operated at <strong>daily-dream.ai</strong>, collects, uses, stores,
+              &quot;our&quot;), operated by <strong>Farallone Media LLC</strong> at{' '}
+              <strong>daily-dreams.ai</strong>, collects, uses, stores,
               and shares information about you when you use our service. Please read it carefully.
               By using Somnio you agree to the practices described here.
             </p>
@@ -98,7 +99,7 @@ export default function PrivacyPage() {
               When you click &quot;Share&quot; on a dream entry, Somnio generates a unique URL of
               the form{' '}
               <code className="bg-purple-900/40 px-1 rounded text-purple-300 text-sm">
-                daily-dream.ai/dream/[share_id]
+                daily-dreams.ai/dream/[share_id]
               </code>
               . Anyone who knows this URL — including people who are not signed in — can view the
               full dream text, interpretation, and generated image.
@@ -274,10 +275,10 @@ export default function PrivacyPage() {
               <strong>Your account</strong> (and all associated data) can be deleted by contacting
               us at{' '}
               <a
-                href="mailto:sean@riley-solutions.com"
+                href="mailto:privacy@farallone.com"
                 className="text-purple-400 hover:text-purple-300 underline"
               >
-                sean@riley-solutions.com
+                privacy@farallone.com
               </a>
               . We will process deletion requests within 30 days.
             </p>
@@ -321,10 +322,10 @@ export default function PrivacyPage() {
             <p>
               To exercise any of these rights, please contact us at{' '}
               <a
-                href="mailto:sean@riley-solutions.com"
+                href="mailto:privacy@farallone.com"
                 className="text-purple-400 hover:text-purple-300 underline"
               >
-                sean@riley-solutions.com
+                privacy@farallone.com
               </a>{' '}
               or via our{' '}
               <Link href="/contact" className="text-purple-400 hover:text-purple-300 underline">
@@ -362,10 +363,10 @@ export default function PrivacyPage() {
             <p>
               For privacy enquiries, data requests, or concerns, please contact us at:{' '}
               <a
-                href="mailto:sean@riley-solutions.com"
+                href="mailto:privacy@farallone.com"
                 className="text-purple-400 hover:text-purple-300 underline"
               >
-                sean@riley-solutions.com
+                privacy@farallone.com
               </a>{' '}
               or via our{' '}
               <Link href="/contact" className="text-purple-400 hover:text-purple-300 underline">
