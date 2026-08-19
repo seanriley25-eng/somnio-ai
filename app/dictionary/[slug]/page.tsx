@@ -57,16 +57,16 @@ export async function generateMetadata({
       title,
       description,
       type: 'article',
-      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: title }],
+      images: [{ url: '/og', width: 1200, height: 630, alt: title }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: ['/og-image.png'],
+      images: ['/og'],
     },
     alternates: {
-      canonical: `https://daily-dream.ai/dictionary/${symbol.slug}`,
+      canonical: `https://daily-dreams.ai/dictionary/${symbol.slug}`,
     },
   };
 }

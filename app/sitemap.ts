@@ -1,7 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getAllSymbols } from '@/lib/symbols/index';
 
-const BASE_URL = 'https://daily-dream.ai';
+const BASE_URL = 'https://daily-dreams.ai';
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const symbols = getAllSymbols();

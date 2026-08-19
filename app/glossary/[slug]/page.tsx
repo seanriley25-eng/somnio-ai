@@ -40,7 +40,7 @@ export async function generateMetadata({
       title: symbol.metaTitle,
       description: symbol.metaDescription,
       type: 'article',
-      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: symbol.metaTitle }],
+      images: [{ url: '/og', width: 1200, height: 630, alt: symbol.metaTitle }],
     },
     alternates: {
       canonical: `/glossary/${slug}`,
