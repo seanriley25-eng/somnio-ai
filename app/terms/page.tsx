@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 export const metadata: Metadata = {
   title: 'Terms of Service — Somnio',
-  description: 'Terms of Service for Somnio (daily-dream.ai). Read our acceptable use policy, AI output disclaimer, and governing law.',
+  description: 'Terms of Service for Somnio (daily-dreams.ai). Read our acceptable use policy, AI output disclaimer, and governing law.',
   robots: { index: true, follow: true },
 };
 

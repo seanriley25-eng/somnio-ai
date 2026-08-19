@@ -2,6 +2,8 @@
 
 import { TrendingUp, Archive, Flame } from 'lucide-react';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
+import { createClient } from '@/lib/supabase/client';
 
 // slug is set only when a /dictionary/[slug] page exists for that symbol.
 // Symbols without a page render as plain text — no broken links.
@@ -13,13 +15,22 @@ const globalDreamCloud: { symbol: string; trend: string; count: string; slug?: s
   { symbol: 'Light',     trend: 'up',   count: '856'  },
 ];
 
-const userSymbols = [
+const trendingSymbols = [
   { symbol: 'Ocean', date: '2 days ago', emotion: 'Peaceful' },
   { symbol: 'Forest', date: '5 days ago', emotion: 'Mysterious' },
   { symbol: 'Flying', date: '1 week ago', emotion: 'Liberated' },
 ];
 
 export default function DailyRitual() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => {
+      setIsLoggedIn(!!data.user);
+    });
+  }, []);
+
   return (
     <div className="space-y-6">
       {/* Global Dream Cloud */}
@@ -69,15 +80,22 @@ export default function DailyRitual() {
         </div>
       </div>
 
-      {/* Your Symbol Vault */}
+      {/* Trending Symbols */}
       <div className="glass-strong p-6">
-        <div className="flex items-center space-x-2 mb-4">
+        <div className="flex items-center space-x-2 mb-1">
           <Archive className="w-5 h-5 text-pink-400" />
-          <h3 className="text-xl font-bold text-purple-300">Your Symbol Vault</h3>
+          <h3 className="text-xl font-bold text-purple-300">
+            {isLoggedIn ? 'Your Symbol Vault' : 'Trending Symbols'}
+          </h3>
         </div>
-        <p className="text-sm text-gray-400 mb-4">Recently logged symbols from your dreams</p>
+        {!isLoggedIn && (
+          <p className="text-xs text-gray-500 mb-3">(sample data)</p>
+        )}
+        <p className="text-sm text-gray-400 mb-4">
+          {isLoggedIn ? 'Recently logged symbols from your dreams' : 'Popular symbols from recent dream logs'}
+        </p>
         <div className="space-y-3">
-          {userSymbols.map((item, index) => (
+          {trendingSymbols.map((item, index) => (
             <div
               key={index}
               className="glass p-3 hover:bg-purple-500/10 transition-all cursor-pointer"

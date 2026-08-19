@@ -16,14 +16,14 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Somnio | AI Dream Interpreter & Symbol Dictionary",
     description: "Unlock the secrets of your subconscious with daily AI-powered dream analysis. Discover the meaning behind recurring symbols and themes.",
-    images: ["/og-image.png"],
+    images: ["/og"],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "Somnio | AI Dream Interpreter & Symbol Dictionary",
     description: "Unlock the secrets of your subconscious with daily AI-powered dream analysis. Discover the meaning behind recurring symbols and themes.",
-    images: ["/og-image.png"],
+    images: ["/og"],
   },
   keywords: ["dream interpretation", "AI dream analysis", "dream symbols", "dream dictionary", "subconscious mind", "recurring dreams", "dream meaning"],
   authors: [{ name: "Somnio" }],

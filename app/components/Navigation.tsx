@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Moon, BookOpen, Sparkles, FileText, Notebook, LogOut, GraduationCap } from 'lucide-react';
+import { Moon, BookOpen, Sparkles, FileText, Notebook, LogOut } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { createClient } from '@/lib/supabase/client';
@@ -55,7 +55,6 @@ export default function Navigation() {
             {navLink('/', 'Dream', Sparkles)}
             {email && navLink('/dreams', 'Journal', Notebook)}
             {navLink('/dictionary', 'Dictionary', BookOpen)}
-            {navLink('/glossary', 'Dream Dictionary', GraduationCap)}
             {navLink('/blog', 'Blog', FileText)}
 
             {email ? (
